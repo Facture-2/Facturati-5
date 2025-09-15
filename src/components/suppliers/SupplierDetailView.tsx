@@ -764,7 +764,7 @@ export default function SupplierDetailView({ supplier, onBack }: SupplierDetailV
         <EditSupplierPaymentModal
           isOpen={!!editingPayment}
           onClose={() => setEditingPayment(null)}
-          payment={supplierPayments.find(payment => payment.id === editingPayment)!}
+          payment={supplierPayments.find(payment => payment.id === editingPayment)}
         />
       )}
     </div>
