@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { useSupplier, SupplierPayment } from '../../contexts/SupplierContext';
+import { useSupplier } from '../../contexts/SupplierContext';
 import Modal from '../common/Modal';
 
-interface EditSupplierPaymentModalProps {
+interface AddSupplierPaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  payment: SupplierPayment;
 }
 
-export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: EditSupplierPaymentModalProps) {
-  const { suppliers, updateSupplierPayment, getSupplierById } = useSupplier();
+export default function AddSupplierPaymentModal({ isOpen, onClose }: AddSupplierPaymentModalProps) {
+  const { suppliers, addSupplierPayment, getSupplierById } = useSupplier();
   const [formData, setFormData] = useState({
-    supplierId: payment.supplierId,
-    amount: payment.amount,
-    paymentMethod: payment.paymentMethod,
-    paymentDate: payment.paymentDate,
-    reference: payment.reference,
-    description: payment.description || ''
+    supplierId: '',
+    amount: 0,
+    paymentMethod: 'virement' as const,
+    paymentDate: new Date().toISOString().split('T')[0],
+    reference: '',
+    description: ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +32,7 @@ export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: E
       return;
     }
     
-    await updateSupplierPayment(payment.id, {
+    await addSupplierPayment({
       supplierId: formData.supplierId,
       supplier,
       amount: formData.amount,
@@ -41,6 +40,16 @@ export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: E
       paymentDate: formData.paymentDate,
       reference: formData.reference,
       description: formData.description
+    });
+    
+    // Reset form
+    setFormData({
+      supplierId: '',
+      amount: 0,
+      paymentMethod: 'virement',
+      paymentDate: new Date().toISOString().split('T')[0],
+      reference: '',
+      description: ''
     });
     
     onClose();
@@ -55,7 +64,7 @@ export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: E
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Modifier Paiement Fournisseur" size="md">
+    <Modal isOpen={isOpen} onClose={onClose} title="Ajouter Paiement Fournisseur" size="md">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors duration-300">
@@ -168,7 +177,7 @@ export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: E
             type="submit"
             className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg transition-all duration-200"
           >
-            Modifier Paiement
+            Ajouter Paiement
           </button>
         </div>
       </form>
