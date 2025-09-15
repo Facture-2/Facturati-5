@@ -761,11 +761,16 @@ export default function SupplierDetailView({ supplier, onBack }: SupplierDetailV
       />
 
       {editingPayment && (
-        <EditSupplierPaymentModal
-          isOpen={!!editingPayment}
-          onClose={() => setEditingPayment(null)}
-          payment={supplierPayments.find(payment => payment.id === editingPayment)}
-        />
+        (() => {
+          const payment = supplierPayments.find(payment => payment.id === editingPayment);
+          return payment ? (
+            <EditSupplierPaymentModal
+              isOpen={!!editingPayment}
+              onClose={() => setEditingPayment(null)}
+              payment={payment}
+            />
+          ) : null;
+        })()
       )}
     </div>
   );
