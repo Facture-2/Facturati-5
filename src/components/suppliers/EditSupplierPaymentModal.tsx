@@ -11,12 +11,12 @@ interface EditSupplierPaymentModalProps {
 export default function EditSupplierPaymentModal({ isOpen, onClose, payment }: EditSupplierPaymentModalProps) {
   const { suppliers, updateSupplierPayment, getSupplierById } = useSupplier();
   const [formData, setFormData] = useState({
-    supplierId: payment.supplierId,
-    amount: payment.amount,
-    paymentMethod: payment.paymentMethod,
-    paymentDate: payment.paymentDate,
-    reference: payment.reference,
-    description: payment.description || ''
+    supplierId: payment?.supplierId || '',
+    amount: payment?.amount || 0,
+    paymentMethod: payment?.paymentMethod || 'virement',
+    paymentDate: payment?.paymentDate || new Date().toISOString().split('T')[0],
+    reference: payment?.reference || '',
+    description: payment?.description || ''
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
